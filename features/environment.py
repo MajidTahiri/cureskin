@@ -11,11 +11,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-# Allure command #
-# python3 -m behave -f allure_behave.formatter:AllureFormatter -o test_results/ features/tests/cart_page_verification.feature
-# ------------------------------------------------------------------------#
-
-
 def browser_init(context, test_name):
     """
     :param context: Behave context
@@ -26,38 +21,26 @@ def browser_init(context, test_name):
     context.driver = webdriver.Chrome(service=service)
     # ------------------------------------------------------------------------#
 
-    # Firefox Browser #
-    # context.driver = webdriver.Firefox(executable_path='/Users/macbookpro/Desktop/QA_automation_program/python'
-    #                                                    '-selenium-automation/geckodriver')
-    # ------------------------------------------------------------------------#
-
-    # Safari Browser #
-    # context.driver = webdriver.Safari()
-    # ------------------------------------------------------------------------#
 
     #### HEADLESS MODE ####
-    # driver_path = ChromeDriverManager().install()
-    # service = Service(driver_path)
-    # options = webdriver.ChromeOptions()
-    # options.add_argument('--headless')
-    # context.driver = webdriver.Chrome(
-    #     chrome_options=options,
-    #     service=service
-    # )
+    driver_path = ChromeDriverManager().install()
+    service = Service(driver_path)
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    context.driver = webdriver.Chrome(
+        chrome_options=options,
+        service=service
+    )
     # ------------------------------------------------------------------------#
 
-    #### BROWSERSTACK ####
-    # desired_cap = {
-    #     'browser': 'Firefox',
-    #     'os_version': '11',
-    #     'os': 'Windows',
-    #     'name': test_name
-    # }
-    # bs_user = 'majic_NU29dk'
-    # bs_key = 'bupZyoGcJy6ph3ANcKAQ'
-    # url = f'http://{bs_user}:{bs_key}@hub-cloud.browserstack.com/wd/hub'
-    # context.driver = webdriver.Remote(url, desired_capabilities=desired_cap)
+
+    # Firefox Browser #
+    geckodriver_path = "/Users/macbookpro/Desktop/QA_automation_program/python-selenium-automation/geckodriver"
+    context.driver = webdriver.Firefox(executable_path=geckodriver_path)
+
     # ------------------------------------------------------------------------#
+
+
 
     context.driver.maximize_window()
     context.driver.implicitly_wait(5)
@@ -89,13 +72,6 @@ def after_step(context, step):
             '{"status":"failed", "reason": "Step failed"}}'
         )
 
-        # Attach a screenshot to Allure report in case the step fails:
-        # allure.attach(
-        #     context.driver.get_screenshot_as_png(),
-        #     name=f'{step.name}.png',
-        #     attachment_type=AttachmentType.PNG
-        # )
-
 
 def after_scenario(context, feature):
-    pass
+    context.driver.close()
