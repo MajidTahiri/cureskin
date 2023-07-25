@@ -6,9 +6,17 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 from app.application import Application
-# from support.logger import logger
-import logging
-logger = logging.getLogger(__name__)
+from support.logger import logger
+
+
+
+
+# Allure command #
+# python3 -m behave -f allure_behave.formatter:AllureFormatter -o test_results/ features/tests/search_results_filter.feature
+
+# Generate report with Allure
+# allure serve test_results
+# ------------------------------------------------------------------------#
 
 
 def browser_init(context, test_name):
@@ -21,26 +29,31 @@ def browser_init(context, test_name):
     context.driver = webdriver.Chrome(service=service)
     # ------------------------------------------------------------------------#
 
+    # desired_cap = {
+    #     'bstack:options': {
+    #         "os": "Windows",
+    #         "osVersion": "11",
+    #         "browserName": "Firefox",
+    #         "browserVersion": "latest",
+    #         "projectName": "Cureskine.com",
+    #         "debug": "true",
+    #     },
+    # }
+    # bs_user = 'majic_NU29dk'
+    # bs_key = 'bupZyoGcJy6ph3ANcKAQ'
+    # url = f'http://{bs_user}:{bs_key}@hub-cloud.browserstack.com/wd/hub'
+    # context.driver = webdriver.Remote(url, desired_capabilities=desired_cap)
+    #
+    # context.driver.execute_script('browserstack_executor: {"action": "setSessionName", '
+    #                               '"arguments": {"name": "Search Filter Can Be Cleared"}}')
 
-    #### HEADLESS MODE ####
-    driver_path = ChromeDriverManager().install()
-    service = Service(driver_path)
-    options = webdriver.ChromeOptions()
-    options.add_argument('--headless')
-    context.driver = webdriver.Chrome(
-        chrome_options=options,
-        service=service
-    )
     # ------------------------------------------------------------------------#
-
 
     # Firefox Browser #
-    geckodriver_path = "/Users/macbookpro/Desktop/QA_automation_program/python-selenium-automation/geckodriver"
-    context.driver = webdriver.Firefox(executable_path=geckodriver_path)
+    # geckodriver_path = "/Users/macbookpro/Desktop/QA_automation_program/python-selenium-automation/geckodriver"
+    # context.driver = webdriver.Firefox(executable_path=geckodriver_path)
 
     # ------------------------------------------------------------------------#
-
-
 
     context.driver.maximize_window()
     context.driver.implicitly_wait(5)
@@ -51,13 +64,13 @@ def browser_init(context, test_name):
 
 
 def before_scenario(context, scenario):
-    # print('\nStarted scenario: ', scenario.name)
+    print('\nStarted scenario: ', scenario.name)
     logger.info(f'Started scenario: {scenario.name}')
     browser_init(context, scenario.name)
 
 
 def before_step(context, step):
-    # print('\nStarted step: ', step)
+    print('\nStarted step: ', step)
     logger.info(f'Started step: {step}')
 
 
@@ -67,11 +80,12 @@ def after_step(context, step):
         print('\nStep failed: ', step)
         # Mark test case as FAILED on BrowserStack:
         # Documentation: https://www.browserstack.com/docs/automate/selenium/view-test-results/mark-tests-as-pass-fail
-        context.driver.execute_script(
-            'browserstack_executor: {"action": "setSessionStatus", "arguments": '
-            '{"status":"failed", "reason": "Step failed"}}'
-        )
+        # context.driver.execute_script(
+        #     'browserstack_executor: {"action": "setSessionStatus", "arguments": '
+        #     '{"status":"failed", "reason": "Step failed"}}'
+        # )
 
 
 def after_scenario(context, feature):
+    context.driver.delete_all_cookies()
     context.driver.close()

@@ -1,3 +1,4 @@
+from selenium.common import StaleElementReferenceException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -44,6 +45,18 @@ class Page:
     def wait_for_element_click(self, *locator):
         e = self.wait.until(EC.element_to_be_clickable(locator), message=f'Element not clickable by {locator}')
         e.click()
+
+
+    def click_element_by_index(self, *locator, index):
+        elements = self.wait.until(EC.presence_of_all_elements_located(locator), message=f'Element not clickable by {locator}')
+        element = elements[index]
+        try:
+            element.click()
+        except StaleElementReferenceException:
+            print("Stale element reference encountered. Trying to locate again...")
+            elements = self.driver.find_elements(*locator)
+            element = elements[index]
+            element.click()
 
 
     def wait_for_element_disappear(self, *locator):

@@ -7,7 +7,7 @@ class SearchResultsPage(Page):
     FILTERS_BTN = (By.ID, "FacetDrawer")
     CHECKBOX_FACE = (By.CSS_SELECTOR, ".facets__inner .facet-checkbox")
     CHECKBOX_SELECTED = (By.CSS_SELECTOR, ".facets__inner [type='checkbox']")
-    CLEAR_ALL = (By.CSS_SELECTOR, ".active-facets a[href='?q=cure&options%5Bprefix%5D=last&sort_by=relevance'")
+    CLEAR_ALL = (By.CSS_SELECTOR, ".active-facets__button")
     APPLY_BTN = (By.CSS_SELECTOR, ".facets__inner [type='button']")
 
 
@@ -29,7 +29,7 @@ class SearchResultsPage(Page):
 
 
     def click_clear_all(self):
-        self.wait.until(EC.element_to_be_clickable(self.CLEAR_ALL)).click()
+        self.click_element_by_index(*self.CLEAR_ALL, index=0)
 
 
     def verify_filter_removed(self):

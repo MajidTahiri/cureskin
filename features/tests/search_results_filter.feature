@@ -1,7 +1,8 @@
 # Created by majidtahiri at 7/13/23
 Feature: Search results filter can be cleared
 
-Scenario: Filter by keyword
+  @smoke
+Scenario: Clear search results filter
   Given the search results page is open
   When user clicks 'More Filters'
   And select 'Face Wash'
