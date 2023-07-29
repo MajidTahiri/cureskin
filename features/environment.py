@@ -3,20 +3,11 @@ from allure_commons.types import AttachmentType
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
 
 from app.application import Application
 from support.logger import logger
 
-
-
-
-# Allure command #
-# python3 -m behave -f allure_behave.formatter:AllureFormatter -o test_results/ features/tests/search_results_filter.feature
-
-# Generate report with Allure
-# allure serve test_results
-# ------------------------------------------------------------------------#
 
 
 def browser_init(context, test_name):
@@ -24,42 +15,22 @@ def browser_init(context, test_name):
     :param context: Behave context
     :param test_name: scenario.name
     """
-    driver_path = ChromeDriverManager().install()
-    service = Service(driver_path)
-    context.driver = webdriver.Chrome(service=service)
-    # ------------------------------------------------------------------------#
 
-    # desired_cap = {
-    #     'bstack:options': {
-    #         "os": "Windows",
-    #         "osVersion": "11",
-    #         "browserName": "Firefox",
-    #         "browserVersion": "latest",
-    #         "projectName": "Cureskine.com",
-    #         "debug": "true",
-    #     },
-    # }
-    # bs_user = 'majic_NU29dk'
-    # bs_key = 'bupZyoGcJy6ph3ANcKAQ'
-    # url = f'http://{bs_user}:{bs_key}@hub-cloud.browserstack.com/wd/hub'
-    # context.driver = webdriver.Remote(url, desired_capabilities=desired_cap)
-    #
-    # context.driver.execute_script('browserstack_executor: {"action": "setSessionName", '
-    #                               '"arguments": {"name": "Search Filter Can Be Cleared"}}')
+    # Set up Chrome driver with mobile emulation
+    mobile_emulation = {"deviceName": "iPhone 12 Pro"}
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_experimental_option("mobileEmulation", mobile_emulation)
 
-    # ------------------------------------------------------------------------#
-
-    # Firefox Browser #
-    # geckodriver_path = "/Users/macbookpro/Desktop/QA_automation_program/python-selenium-automation/geckodriver"
-    # context.driver = webdriver.Firefox(executable_path=geckodriver_path)
-
-    # ------------------------------------------------------------------------#
-
+    # Create the driver instance and set up wait
+    chromedriver_path = '/Users/macbookpro/Desktop/QA_automation_program/cureskin/chromedriver'
+    context.driver = webdriver.Chrome(executable_path=chromedriver_path, options=chrome_options)
     context.driver.maximize_window()
     context.driver.implicitly_wait(5)
     context.driver.wait = WebDriverWait(context.driver, 10)
 
+    # Assign the driver to the application context
     context.app = Application(context.driver)
+
     # ------------------------------------------------------------------------#
 
 
