@@ -1,4 +1,5 @@
 from pages.base_page import Page
+
 # from pages.search_results_page import SearchResultsPage
 from pages.search_results_mobile_page import SearchResultsMobilePage
 

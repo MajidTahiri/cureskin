@@ -13,7 +13,7 @@ Feature: Search results filter can be cleared
 
 
 
-  Scenario: Clear search results filter on mobile
+  Scenario: Clear search results filter on mobile devices
     Given the search results page is open
     When user taps 'Filter and Sort'
     And tap 'Product type'
