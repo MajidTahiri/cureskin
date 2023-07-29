@@ -2,6 +2,8 @@ import allure
 from allure_commons.types import AttachmentType
 from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 
 from app.application import Application
 from support.logger import logger
